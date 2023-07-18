@@ -1,7 +1,6 @@
 
-//import
 const express = require('express');
-//require('./db')
+require('./db')
 const cors = require('cors')
 const app = express();
 const jwt = require('jsonwebtoken');
@@ -25,13 +24,13 @@ const corsConfig = {
 
 
 //router
-// const userRouter = require("./routes/user")
+ const userRouter = require("./Routes/User")
 // const actorRouter = require("./routes/actor")
 // const movieRouter = require("./routes/movie")
 
 
 
-// app.use("/api/user",userRouter);
+ app.use("/api/user",userRouter);
 // app.use("/api/actor",actorRouter );
 // app.use("/api/movie",movieRouter );
 
