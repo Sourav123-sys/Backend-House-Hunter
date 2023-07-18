@@ -2,7 +2,7 @@ const express = require('express');
 
 const { validate,  } = require('../middleware/Validator');
 const { isAuth, isOwner } = require('../middleware/auth');
-const { createRentController, getRendById, removeRentHouse } = require('../Controllers/RentHouse.controller');
+const { createRentController, getRendById, removeRentHouse, getAllHouse } = require('../Controllers/RentHouse.controller');
 
 
 
@@ -23,6 +23,10 @@ router.get("/get-rent/:id",
      router.delete("/delete-rent/:id", 
         isAuth, isOwner,  
         removeRentHouse
+        )
+     router.get("/get-search-house", 
+        
+        getAllHouse
         )
   
 

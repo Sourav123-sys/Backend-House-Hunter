@@ -4,7 +4,7 @@ const OwnerHouse = require('../models/OwnerHouse')
 const RentHouse = require('../models/RentHouse')
 const User = require('../models/User')
 const { isValidObjectId } = require('mongoose')
-const { pick } = require('../utils/helper')
+const { pick, paginationHelper } = require('../utils/helper')
 
 exports.createRentController = async (req, res,next) => {
     const rentdata = req.body
@@ -102,5 +102,43 @@ exports.getAllHouse = async (req, res, next) => {
     const paginationFields = ['page', 'limit', 'sortBy', 'sortOrder']
     const filterField =['city', 'bedrooms', 'bathrooms', "roomSize",
         "availability", " rentPerMonth" ]
-    const filters = pick(req.query,['searchTerm',filterField ])
+    const filters = pick(req.query, ['searchTerm', filterField])
+    const paginationOption = pick(req.query, paginationFields)
+    
+    const { searchTerm, ...filterFields } = filters
+    const andConditions = []
+    if (searchTerm) {
+        andConditions.push({
+        
+           name : new RegExp(searchTerm, 'i'),
+          
+        })
+      }
+    
+      if (Object.keys(filterFields).length) {
+        andConditions.push({
+          $and: Object.entries(filterFields).map(([key, value]) => ({
+            [key]: value,
+          })),
+        })
+    }
+    
+    const whereCondition = andConditions.length ? { $and: andConditions } : {}
+    const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper(paginationOption)
+
+  const sortCondition = {}
+
+  if (sortBy && sortOrder) {
+    sortCondition[sortBy] = sortOrder
+  }
+
+  const result = await OwnerHouse
+    .find(whereCondition)
+    .sort(sortCondition)
+    .skip(skip)
+    .limit(limit )
+    
+
+    res.json({ message: 'here is your house list',data:result })
 }
