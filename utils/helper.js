@@ -23,4 +23,17 @@ exports.formatHouse = (actor) => {
       gender,
       avatar: avatar?.url,
     };
-  };
+};
+  
+
+exports.pick = (obj, keys) => {
+    
+    const outputObject = {}
+    keys.forEach(key => {
+        if (obj && Object.hasOwnProperty.call(obj, key)) {
+          outputObject[key] = obj[key]
+        }
+      })
+    
+      return outputObject
+}

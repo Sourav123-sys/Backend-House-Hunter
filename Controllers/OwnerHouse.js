@@ -16,11 +16,11 @@ exports.createHouse = async (req, res) => {
     const { file, body } = req
 
     const {
-        name,address,city,bedrooms,bathrooms,roomSize,availabilityDate,rentPerMonth,phoneNumber,description
-    } = body
+        name,address,city,bedrooms,bathrooms,roomSize,availabilityDate,rentPerMonth,phoneNumber,description,
+   ownerId } = body
 console.log(body,"body from create Owner");
     const newOwnerHouse = new OwnerHouse({
-        name,address,city,bedrooms,bathrooms,roomSize,availabilityDate,rentPerMonth,phoneNumber,description
+        name,address,city,bedrooms,bathrooms,roomSize,availabilityDate,rentPerMonth,phoneNumber,description,ownerId
     })
 
     if (file) {
@@ -61,6 +61,7 @@ console.log(body,"body from create Owner");
 
     res.status(201).json({
         id: newOwnerHouse._id,
+        ownerId,
         name,address,city,bedrooms,bathrooms,roomSize,availabilityDate,rentPerMonth,phoneNumber,description,picture:newOwnerHouse.picture
     })
 }
@@ -197,4 +198,21 @@ console.log(ownerHouse ,"ownerHouse -remove");
     res.json({message: 'Owner House deleted successfully'})
 
 
+}
+
+exports. getOwnerHouse = async (req, res,next) => {
+    const { id } = req.params
+    try {
+
+        const populatedOwnerHouse = await OwnerHouse.find({ ownerId: id })
+       
+      
+        if (! populatedOwnerHouse.length) {
+            throw new Error("There is no house ")
+        }
+        res.status(200).json({ message: "Here is your rent house", data: populatedOwnerHouse })
+    } catch (err) {
+        console.log(err);
+        next(err) 
+    }
 }

@@ -58,9 +58,16 @@ const OwnerHouseSchema = mongoose.Schema({
     public_id: { type: String, required: true },
     responsive: [  URL],
     required:true
+    },
+   ownerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
     }
   
-})
+},
+{
+    timestamps: true,
+  })
 
 
 
