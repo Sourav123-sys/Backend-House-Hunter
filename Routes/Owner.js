@@ -2,7 +2,7 @@ const express = require('express');
 
 const { validate, userValidator, signInValidator, ownerHouseValidator } = require('../middleware/Validator');
 const { isAuth, isOwner } = require('../middleware/auth');
-const { createHouse, updateOwnerHouse } = require('../Controllers/OwnerHouse');
+const { createHouse, updateOwnerHouse, removeOwnerHouse } = require('../Controllers/OwnerHouse');
 const { uploadImage } = require('../middleware/multer');
 
 const router = express.Router()
@@ -13,12 +13,19 @@ router.post("/create-house",
     uploadImage.single('picture'),
     ownerHouseValidator, validate, createHouse)
 
-    router.patch("/house-update/:id", 
+    router.patch("/update-house/:id", 
     isAuth,  isOwner, 
     
     uploadImage.single('picture'),
    
     ownerHouseValidator,
     validate,
-    updateOwnerHouse)
+        updateOwnerHouse)
+    
+
+        router.delete("/delete-house/:id", 
+        isAuth, isOwner,  
+        removeOwnerHouse
+        )
+
 module.exports = router;

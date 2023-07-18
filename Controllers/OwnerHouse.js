@@ -1,7 +1,7 @@
 const { isValidObjectId } = require('mongoose')
 const OwnerHouse= require('../models/OwnerHouse')
 
-const { generateRandomByte } = require('../utils/helper');
+
 
 
 const cloudinary = require('cloudinary').v2
@@ -160,3 +160,41 @@ exports.updateOwnerHouse= async (req, res) => {
         
       }, });
   };
+
+  exports.removeOwnerHouse = async (req, res) => {
+    const { id } = req.params
+    const ownerHouseId = id
+    const {picture} =req.body
+    console.log(picture,"poster from remove movie");
+    if (!isValidObjectId(ownerHouseId)) {
+        return res.status(200).json({ error: "Invalid ownerHouse id" })
+    }
+   
+    const ownerHouse = await OwnerHouse.findById(ownerHouseId)
+    if (!ownerHouse ) {
+        return res.status(200).json({ error: "ownerHouse  not found" })
+    }
+console.log(ownerHouse ,"ownerHouse -remove");
+    const public_id = ownerHouse ?.picture?.public_id
+    //console.log(public_id, "pictureid");
+    
+    
+    if (public_id) { 
+     
+        const   result  =await cloudinary.uploader.destroy(public_id)
+       // console.log(result.result, 'result from remove with picture')
+
+        if (result.result ==='not found') {
+            return res.status(200).json({ error: "could not remove picture from cloud" })
+        }
+
+    }
+
+   
+    
+
+    await OwnerHouse.findByIdAndDelete(ownerHouseId)
+    res.json({message: 'Owner House deleted successfully'})
+
+
+}
