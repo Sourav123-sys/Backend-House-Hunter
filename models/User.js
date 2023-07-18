@@ -19,7 +19,7 @@ const UserSchema = mongoose.Schema({
     phoneNumber: {
         type: Number,
         required: true,
-        default: false
+       
     },
     role: {
         type: String,

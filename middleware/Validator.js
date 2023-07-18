@@ -31,3 +31,20 @@ exports.signInValidator= [
     check('email').trim().normalizeEmail().notEmpty().isEmail().withMessage("Email is invalid"),
     check('password').trim().notEmpty().withMessage("Password is missing")
 ]
+
+exports.ownerHouseValidator = [
+    check('name').trim().notEmpty().withMessage("name is invalid"),
+    check('address').trim().notEmpty().withMessage("address is invalid"),
+    check('city').trim().notEmpty().withMessage("address is invalid"),
+    check('bedrooms').trim().notEmpty().withMessage("bedrooms is invalid"),
+    check('bathrooms').trim().notEmpty().withMessage("bathrooms is invalid"),
+    check('roomSize').trim().notEmpty().withMessage("roomSize is invalid"),
+    check('availabilityDate').trim().notEmpty().withMessage(" availabilityDate is invalid"),
+    check('rentPerMonth').trim().notEmpty().withMessage("rentPerMonth is invalid"),
+    check('phoneNumber').trim().notEmpty().withMessage("phoneNumber is invalid"),
+    check('description').trim().notEmpty().withMessage("description is invalid"),
+   
+  
+  
+    
+]
