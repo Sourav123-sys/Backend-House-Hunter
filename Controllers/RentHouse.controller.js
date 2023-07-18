@@ -3,7 +3,7 @@
 const OwnerHouse = require('../models/OwnerHouse')
 const RentHouse= require('../models/RentHouse')
 const User = require('../models/User')
-
+const { isValidObjectId } = require('mongoose')
 
 exports.createRentController = async (req, res) => {
     const rentdata = req.body
@@ -69,5 +69,27 @@ exports.getRendById = async (req,res) => {
         console.log(err);
         throw err
     }
+}
+exports.removeRentHouse = async (req, res) => {
+    const { id } = req.params
+    const rentHouseId = id
+   
+   
+    if (!isValidObjectId(rentHouseId)) {
+        return res.status(200).json({ error: "Invalid rentHouseId id" })
+    }
+   
+    const rentHouse = await RentHouse.findById(rentHouseId)
+    if (!rentHouse ) {
+        return res.status(200).json({ error: "rentHouse  not found" })
+    }
+
+    
+    
+   
+    await RentHouse.findByIdAndDelete(rentHouseId)
+    res.json({message: 'Rent House deleted successfully'})
+
+
 }
 

@@ -2,7 +2,7 @@ const express = require('express');
 
 const { validate,  } = require('../middleware/Validator');
 const { isAuth, isOwner } = require('../middleware/auth');
-const { createRentController, getRendById } = require('../Controllers/RentHouse.controller');
+const { createRentController, getRendById, removeRentHouse } = require('../Controllers/RentHouse.controller');
 
 
 
@@ -20,7 +20,10 @@ router.get("/get-rent/:id",
      validate, getRendById  )
 
   
-    
+     router.delete("/delete-rent/:id", 
+        isAuth, isOwner,  
+        removeRentHouse
+        )
   
 
 
