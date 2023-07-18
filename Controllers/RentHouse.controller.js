@@ -40,7 +40,7 @@ exports.createRentController = async (req, res) => {
         {path:"userId",model:User}
         ]);
     if (!rentHouse) {
-        throw new Error ("Some thing went wrong")
+        throw new Error ("There is no rent house in your list")
     }
         
         
