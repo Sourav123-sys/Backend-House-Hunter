@@ -28,4 +28,6 @@ router.post("/create-house",
         removeOwnerHouse
         )
 
+
+       // router.get("/movies", isAuth, isOwner, getOwnerHouse);
 module.exports = router;

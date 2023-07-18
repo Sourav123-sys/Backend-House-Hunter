@@ -26,13 +26,14 @@ const corsConfig = {
 //router
  const userRouter = require("./Routes/User")
  const ownerRouter = require("./Routes/Owner")
-// const actorRouter = require("./routes/actor")
+ const rentRouter = require("./Routes/Rent")
 // const movieRouter = require("./routes/movie")
 
 
 
  app.use("/api/user",userRouter);
  app.use("/api/owner",ownerRouter);
+ app.use("/api/rent",rentRouter);
 // app.use("/api/actor",actorRouter );
 // app.use("/api/movie",movieRouter );
 

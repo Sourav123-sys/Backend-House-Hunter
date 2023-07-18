@@ -4,7 +4,7 @@ const { validate, userValidator, signInValidator } = require('../middleware/Vali
 
 const router = express.Router()
 
-router.post("/create", userValidator, validate, create)
+router.post("/register", userValidator, validate, create)
 
 router.post("/signin",signInValidator,validate,signIn)
 module.exports = router;
