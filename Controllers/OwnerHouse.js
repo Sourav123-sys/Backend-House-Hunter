@@ -66,3 +66,97 @@ console.log(body,"body from create Owner");
 }
 
 
+exports.updateOwnerHouse= async (req, res) => {
+    const { id } = req.params;
+    const { file } = req;
+  const HouseId = id
+    if (!isValidObjectId(HouseId)) {
+        return res.status(200).json({ error: "Invalid House ID!" })
+    } 
+  
+    
+  
+    const ownerHouse= await OwnerHouse.findById(HouseId);
+    //console.log(ownerHouse,"update-movie");
+    if (!ownerHouse) {
+        return res.status(200).json({ error: "ownerHouse Not Found!" })
+    } 
+  
+    const {
+        name,address,city,bedrooms,bathrooms,roomSize,availabilityDate,rentPerMonth,phoneNumber,description,
+    picture} = req.body;
+  
+   ownerHouse.name = name;
+   ownerHouse.address = address;
+   ownerHouse.city = city;
+   ownerHouse.bedrooms = bedrooms;
+   ownerHouse.bathrooms = bathrooms;
+   ownerHouse.roomSize = roomSize;
+   ownerHouse.availabilityDate = availabilityDate;
+   ownerHouse.rentPerMonth = rentPerMonth;
+   ownerHouse.phoneNumber = phoneNumber;
+   ownerHouse.description = description;
+  
+  
+    // update picture
+    if (file) {
+      // removing poster from cloud if there is any.
+        const pictureID =ownerHouse.picture?.public_id;
+        //console.log(pictureID,"pictureID id for ownerHouse update");
+        if (pictureID) {
+          console.log(pictureID,"enter");
+          const   result  = await cloudinary.uploader.destroy(pictureID);
+          //console.log(result,"result from update-movie");
+        if (result.result === "not found") {
+            return res.status(200).json({ error: "Could not update picture at the moment!" });
+        }
+  
+        // uploading picture
+        const {
+          secure_url: url,
+          public_id,
+          responsive_breakpoints,
+        } = await cloudinary.uploader.upload(req.file.path, {
+          transformation: {
+            width: 1280,
+            height: 720,
+          },
+          responsive_breakpoints: {
+            create_derived: true,
+            max_width: 640,
+            max_images: 3,
+          },
+        });
+  
+        const finalPicture = { url, public_id, responsive: [] };
+  
+        const { breakpoints } = responsive_breakpoints[0];
+        if (breakpoints.length) {
+          for (let imgObj of breakpoints) {
+            const { secure_url } = imgObj;
+            finalPicture .responsive.push(secure_url);
+          }
+        }
+  
+       ownerHouse.picture = finalPicture ;
+      }
+    }
+  
+    await ownerHouse.save();
+  
+    res.json({ message: "ownerHouse is updated",ownerHouse: {
+        id:ownerHouse._id,
+       name: ownerHouse.name,
+      address:  ownerHouse.address,
+      city:  ownerHouse.city,
+         bedrooms : ownerHouse.bedrooms ,
+        bathrooms : ownerHouse.bathrooms, 
+       roomSize : ownerHouse.roomSize , 
+       availabilityDate :  ownerHouse.availabilityDate, 
+        rentPerMonth : ownerHouse.rentPerMonth ,
+        phoneNumber : ownerHouse.phoneNumber ,
+         description : ownerHouse.description ,
+        picture:ownerHouse.picture?.url,
+        
+      }, });
+  };
